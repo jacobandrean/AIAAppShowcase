@@ -10,10 +10,22 @@ import UIKit
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
+    var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        let defaults = UserDefaults.standard
+        let hasLaunched = defaults.bool(forKey: "HasLaunched")
+        if !hasLaunched {
+            defaults.set(true, forKey: "HasLaunched")
+            defaults.set("1min", forKey: "Interval")
+            defaults.set("compact", forKey: "OutputSize")
+        }
+        
+        let window = UIWindow(frame: UIScreen.main.bounds)
+        window.rootViewController = TabBarController()
+        window.makeKeyAndVisible()
+        self.window = window
         return true
     }
 
