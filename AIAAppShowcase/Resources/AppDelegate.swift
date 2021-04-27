@@ -18,6 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let hasLaunched = defaults.bool(forKey: "HasLaunched")
         if !hasLaunched {
             defaults.set(true, forKey: "HasLaunched")
+            defaults.set("KWFWUZ8HYAX1CBAJ", forKey: "APIKey")
             defaults.set("1min", forKey: "Interval")
             defaults.set("compact", forKey: "OutputSize")
         }

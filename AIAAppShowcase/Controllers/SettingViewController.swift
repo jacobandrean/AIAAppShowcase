@@ -127,9 +127,11 @@ class SettingViewController: UIViewController {
         view.addSubview(intervalTextField)
         view.addSubview(outputSizeTextField)
         
-        apiKeyTextField.text = "asd"
+        apiKeyTextField.text = defaults.string(forKey: "APIKey")
         intervalTextField.text = defaults.string(forKey: "Interval")
         outputSizeTextField.text = defaults.string(forKey: "OutputSize")
+        
+        apiKeyTextField.delegate = self
         
         intervalTextField.inputView = intervalPicker
         intervalPicker.delegate = self
@@ -140,6 +142,17 @@ class SettingViewController: UIViewController {
         outputSizePicker.dataSource = self
     }
     
+}
+
+extension SettingViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        defaults.set(textField.text, forKey: "APIKey")
+        return true
+    }
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        defaults.set(textField.text, forKey: "APIKey")
+    }
 }
 
 extension SettingViewController: UIPickerViewDataSource, UIPickerViewDelegate {

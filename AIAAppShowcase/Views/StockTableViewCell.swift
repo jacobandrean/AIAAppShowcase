@@ -45,15 +45,21 @@ class StockTableViewCell: UITableViewCell {
         contentView.addSubview(openLabel)
         contentView.addSubview(highLabel)
         contentView.addSubview(lowLabel)
+        setupViewConstraint()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
+    override func prepareForReuse() {
+        dateLabel.text = nil
+        openLabel.text = nil
+        highLabel.text = nil
+        lowLabel.text  = nil
+    }
+    
+    private func setupViewConstraint() {
         NSLayoutConstraint.activate([
             dateLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
             dateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
@@ -75,11 +81,11 @@ class StockTableViewCell: UITableViewCell {
     }
     
     public func configureCell(date: String, open: String, high: String, low: String) {
-        layoutIfNeeded()
+        isUserInteractionEnabled = false
         dateLabel.text = date
         openLabel.text = "Open :   \(open)"
-        highLabel.text = "High :   \(high)"
-        lowLabel.text  = "low  :   \(low)"
+        highLabel.text = "High  :   \(high)"
+        lowLabel.text  = "Low   :   \(low)"
     }
     
 }
