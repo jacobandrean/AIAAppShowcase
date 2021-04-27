@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5A10F12A263561AA0017CAB6 /* StockTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A10F129263561AA0017CAB6 /* StockTableViewCell.swift */; };
 		5A10F1372635839E0017CAB6 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A10F1362635839E0017CAB6 /* Extensions.swift */; };
 		5A45F72426363E1C001596C5 /* DailyAdjusted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A45F72326363E1C001596C5 /* DailyAdjusted.swift */; };
 		5A45F72926364A06001596C5 /* ComparisonTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A45F72826364A06001596C5 /* ComparisonTableViewCell.swift */; };
@@ -45,7 +44,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		5A10F129263561AA0017CAB6 /* StockTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockTableViewCell.swift; sourceTree = "<group>"; };
 		5A10F1362635839E0017CAB6 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		5A45F72326363E1C001596C5 /* DailyAdjusted.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyAdjusted.swift; sourceTree = "<group>"; };
 		5A45F72826364A06001596C5 /* ComparisonTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComparisonTableViewCell.swift; sourceTree = "<group>"; };
@@ -163,7 +161,6 @@
 			isa = PBXGroup;
 			children = (
 				5A6BD5772633B3AC00527C10 /* LaunchScreen.storyboard */,
-				5A10F129263561AA0017CAB6 /* StockTableViewCell.swift */,
 				5A45F7302637EB5C001596C5 /* StockCollectionViewCell.swift */,
 				5A45F7382637F703001596C5 /* SortCollectionViewCell.swift */,
 				5A45F72826364A06001596C5 /* ComparisonTableViewCell.swift */,
@@ -333,7 +330,6 @@
 				5A45F72426363E1C001596C5 /* DailyAdjusted.swift in Sources */,
 				5A6BD5B02633B76800527C10 /* ComparisonViewController.swift in Sources */,
 				5A6BD5C32633C01100527C10 /* APICaller.swift in Sources */,
-				5A10F12A263561AA0017CAB6 /* StockTableViewCell.swift in Sources */,
 				5A6BD56F2633B3AB00527C10 /* SceneDelegate.swift in Sources */,
 				5A6BD5C82633CC2400527C10 /* Intraday.swift in Sources */,
 				5A6BD5AB2633B6F600527C10 /* StocksViewController.swift in Sources */,

@@ -25,8 +25,6 @@ class StocksViewController: UIViewController {
     var apiKey: String = ""
     var symbol: String = "IBM"
     
-    let sortBys = ["Highest Open", "Lowest Open", "Highest High", "Lowest High", "Highest Low", "Lowest Low", "Newest", "Oldest"]
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -165,7 +163,7 @@ extension StocksViewController: UICollectionViewDataSource, UICollectionViewDele
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return sortBys.count
+            return 1
         case 1:
             return stockDates.count
         default:
@@ -179,7 +177,7 @@ extension StocksViewController: UICollectionViewDataSource, UICollectionViewDele
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SortCollectionViewCell.identifier, for: indexPath) as? SortCollectionViewCell else {
                 return UICollectionViewCell()
             }
-            cell.configureCell(sortBy: sortBys[indexPath.row])
+            cell.delegate = self
             return cell
         case 1:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: StockCollectionViewCell.identifier, for: indexPath) as? StockCollectionViewCell else {
@@ -219,7 +217,7 @@ extension StocksViewController: UICollectionViewDataSource, UICollectionViewDele
             item.contentInsets = NSDirectionalEdgeInsets(top: 2, leading: 2, bottom: 2, trailing: 2)
             let group = NSCollectionLayoutGroup.horizontal(
                 layoutSize: NSCollectionLayoutSize(
-                    widthDimension: .absolute(150),
+                    widthDimension: .estimated(1275),
                     heightDimension: .absolute(40)
                 ),
                 subitem: item,
@@ -265,6 +263,32 @@ extension StocksViewController: UICollectionViewDataSource, UICollectionViewDele
             )
             let section = NSCollectionLayoutSection(group: group)
             return section
+        }
+    }
+    
+}
+
+extension StocksViewController: SortCollectionViewCellDelegate {
+    func sortStock(_ sender: UIButton) {
+        switch sender.tag {
+        case 0:
+            break
+        case 1:
+            break
+        case 2:
+            break
+        case 3:
+            break
+        case 4:
+            break
+        case 5:
+            break
+        case 6:
+            break
+        case 7:
+            break
+        default:
+            break
         }
     }
     
