@@ -18,7 +18,7 @@ class StocksViewController: UIViewController {
     }))
     
     var stockDates: [String] = []
-    var stockCharts: [TimeSeries] = []
+    var stockCharts: [String: TimeSeries] = [:]
     
     var interval: String = "1min"
     var outputSize: String = "compact"
@@ -31,7 +31,6 @@ class StocksViewController: UIViewController {
         view.backgroundColor = .systemBackground
         configureSearchController()
         configureCollectionView()
-        fetchData()
     }
     
     override func viewDidLayoutSubviews() {
@@ -63,81 +62,100 @@ class StocksViewController: UIViewController {
             return
         }
         stockDates = []
-        stockCharts = []
+        stockCharts = [:]
         collectionView.reloadData()
         interval = intervalFromUserDefaults
         outputSize = outputSizeFromUserDefaults
         apiKey = apiKeyFromUserDefaults
+        let group = DispatchGroup()
+        group.enter()
+        let alert = UIAlertController(title: "Fetching Stock...", message: "", preferredStyle: .alert)
+        present(alert, animated: true, completion: nil)
         switch interval {
         case "1min":
             APICaller.shared.getOneMinIntraday(function: .TIME_SERIES_INTRADAY, symbol: symbol, outputSize: outputSize, apiKey: apiKey) { [weak self] (result) in
+                defer {
+                    group.leave()
+                }
                 switch result {
                 case .success(let stock):
                     self?.stockDates.append(contentsOf: stock.timeSeries.keys)
-                    self?.stockCharts.append(contentsOf: stock.timeSeries.values)
-                    DispatchQueue.main.async {
-                        self?.collectionView.reloadData()
-                    }
+                    self?.stockCharts = stock.timeSeries
                 case .failure(let error):
                     print(error)
                 }
             }
         case "5min":
             APICaller.shared.getFiveMinIntraday(function: .TIME_SERIES_INTRADAY, symbol: symbol, outputSize: outputSize, apiKey: apiKey) { [weak self] (result) in
+                defer {
+                    group.leave()
+                }
                 switch result {
                 case .success(let stock):
                     self?.stockDates.append(contentsOf: stock.timeSeries.keys)
-                    self?.stockCharts.append(contentsOf: stock.timeSeries.values)
-                    DispatchQueue.main.async {
-                        self?.collectionView.reloadData()
-                    }
+                    self?.stockCharts = stock.timeSeries
                 case .failure(let error):
                     print(error)
                 }
             }
         case "15min":
             APICaller.shared.getFifteenMinIntraday(function: .TIME_SERIES_INTRADAY, symbol: symbol, outputSize: outputSize, apiKey: apiKey) { [weak self] (result) in
+                defer {
+                    group.leave()
+                }
                 switch result {
                 case .success(let stock):
                     self?.stockDates.append(contentsOf: stock.timeSeries.keys)
-                    self?.stockCharts.append(contentsOf: stock.timeSeries.values)
-                    DispatchQueue.main.async {
-                        self?.collectionView.reloadData()
-                    }
+                    self?.stockCharts = stock.timeSeries
                 case .failure(let error):
                     print(error)
                 }
             }
         case "30min":
             APICaller.shared.getThirtyMinIntraday(function: .TIME_SERIES_INTRADAY, symbol: symbol, outputSize: outputSize, apiKey: apiKey) { [weak self] (result) in
+                defer {
+                    group.leave()
+                }
                 switch result {
                 case .success(let stock):
                     self?.stockDates.append(contentsOf: stock.timeSeries.keys)
-                    self?.stockCharts.append(contentsOf: stock.timeSeries.values)
-                    DispatchQueue.main.async {
-                        self?.collectionView.reloadData()
-                    }
+                    self?.stockCharts = stock.timeSeries
                 case .failure(let error):
                     print(error)
                 }
             }
         case "60min":
             APICaller.shared.getSixtyMinIntraday(function: .TIME_SERIES_INTRADAY, symbol: symbol, outputSize: outputSize, apiKey: apiKey) { [weak self] (result) in
+                defer {
+                    group.leave()
+                }
                 switch result {
                 case .success(let stock):
                     self?.stockDates.append(contentsOf: stock.timeSeries.keys)
-                    self?.stockCharts.append(contentsOf: stock.timeSeries.values)
-                    DispatchQueue.main.async {
-                        self?.collectionView.reloadData()
-                    }
+                    self?.stockCharts = stock.timeSeries
                 case .failure(let error):
                     print(error)
                 }
             }
         default:
+            group.leave()
             break
         }
-        
+        group.notify(queue: .main) {
+            self.dismiss(animated: true, completion: nil)
+            if self.stockDates.count == 0 {
+                self.title = "Stock"
+                let alert = UIAlertController(title: "Failed to Fetch Stock", message: "", preferredStyle: .alert)
+                self.present(alert, animated: true) {
+                    Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { [weak self] (_) in
+                        self?.dismiss(animated: true, completion: nil)
+                    }
+                }
+            } else {
+                self.collectionView.reloadData()
+                self.title = self.symbol
+            }
+        }
     }
 
 }
@@ -148,8 +166,6 @@ extension StocksViewController: UISearchBarDelegate {
             return
         }
         symbol = searchSymbol.uppercased()
-        self.title = symbol
-        print(symbol)
         searchController.isActive = false
         fetchData()
     }
@@ -183,26 +199,16 @@ extension StocksViewController: UICollectionViewDataSource, UICollectionViewDele
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: StockCollectionViewCell.identifier, for: indexPath) as? StockCollectionViewCell else {
                 return UICollectionViewCell()
             }
-            cell.configureCell(
-                date: stockDates[indexPath.row],
-                open: stockCharts[indexPath.row].open,
-                high: stockCharts[indexPath.row].high,
-                low: stockCharts[indexPath.row].low
-            )
+            let dates = stockDates[indexPath.row]
+            let charts = stockCharts[dates]
+            cell.configureCell(date: dates, open: charts?.open, high: charts?.high, low: charts?.low)
+            
             return cell
         default:
             return UICollectionViewCell()
         }
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print(indexPath)
-        if indexPath.section == 0 {
-            if let cell = collectionView.cellForItem(at: indexPath) as? SortCollectionViewCell {
-                cell.selectCell()
-            }
-        }
-    }
     
     static func createSectionLayout(section: Int) -> NSCollectionLayoutSection {
         
@@ -272,21 +278,49 @@ extension StocksViewController: SortCollectionViewCellDelegate {
     func sortStock(_ sender: UIButton) {
         switch sender.tag {
         case 0:
-            break
+            // highest open
+            let sortedCharts = stockCharts.sorted(by: {$0.value.open > $1.value.open})
+            stockDates = []
+            stockDates.append(contentsOf: sortedCharts.compactMap({$0.key}))
+            collectionView.reloadData()
         case 1:
-            break
+            // lowest open
+            let sortedCharts = stockCharts.sorted(by: {$0.value.open < $1.value.open})
+            stockDates = []
+            stockDates.append(contentsOf: sortedCharts.compactMap({$0.key}))
+            collectionView.reloadData()
         case 2:
-            break
+            // highest high
+            let sortedCharts = stockCharts.sorted(by: {$0.value.high > $1.value.high})
+            stockDates = []
+            stockDates.append(contentsOf: sortedCharts.compactMap({$0.key}))
+            collectionView.reloadData()
         case 3:
-            break
+            // lowest high
+            let sortedCharts = stockCharts.sorted(by: {$0.value.high < $1.value.high})
+            stockDates = []
+            stockDates.append(contentsOf: sortedCharts.compactMap({$0.key}))
+            collectionView.reloadData()
         case 4:
-            break
+            // highest low
+            let sortedCharts = stockCharts.sorted(by: {$0.value.low > $1.value.low})
+            stockDates = []
+            stockDates.append(contentsOf: sortedCharts.compactMap({$0.key}))
+            collectionView.reloadData()
         case 5:
-            break
+            // lowest low
+            let sortedCharts = stockCharts.sorted(by: {$0.value.low < $1.value.low})
+            stockDates = []
+            stockDates.append(contentsOf: sortedCharts.compactMap({$0.key}))
+            collectionView.reloadData()
         case 6:
-            break
+            // newest
+            stockDates = stockDates.sorted(by: {$0 > $1})
+            collectionView.reloadData()
         case 7:
-            break
+            // oldest
+            stockDates = stockDates.sorted(by: {$0 < $1})
+            collectionView.reloadData()
         default:
             break
         }

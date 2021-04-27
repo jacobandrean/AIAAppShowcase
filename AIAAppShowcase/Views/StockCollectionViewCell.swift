@@ -81,7 +81,12 @@ class StockCollectionViewCell: UICollectionViewCell {
         ])
     }
     
-    public func configureCell(date: String, open: String, high: String, low: String) {
+    public func configureCell(date: String, open: String?, high: String?, low: String?) {
+        guard let open = open,
+              let high = high,
+              let low = low else {
+            return
+        }
         dateLabel.text = date
         openLabel.text = "Open :   \(open)"
         highLabel.text = "High  :   \(high)"

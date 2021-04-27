@@ -131,10 +131,20 @@ class ComparisonViewController: UIViewController {
     }
     
     @objc private func compareSymbol() {
-        firstSymbol.resignFirstResponder()
-        secondSymbol.resignFirstResponder()
-        thirdSymbol.resignFirstResponder()
-        fetchData()
+        
+        if firstSymbol.text != "" || secondSymbol.text != "" || thirdSymbol.text != "" {
+            firstSymbol.resignFirstResponder()
+            secondSymbol.resignFirstResponder()
+            thirdSymbol.resignFirstResponder()
+            fetchData()
+        } else {
+            let alert = UIAlertController(title: "You need to input at least one symbol", message: "", preferredStyle: .alert)
+            self.present(alert, animated: true) {
+                Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { [weak self] (_) in
+                    self?.dismiss(animated: true, completion: nil)
+                }
+            }
+        }
     }
     
     private func fetchData() {
@@ -152,7 +162,7 @@ class ComparisonViewController: UIViewController {
         group.enter()
         group.enter()
         group.enter()
-        let alert = UIAlertController(title: "Fetching Data...", message: "", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Fetching Stock...", message: "", preferredStyle: .alert)
         present(alert, animated: true, completion: nil)
         if let firstSymbol = firstSymbol.text?.uppercased() {
             print("FIRSTSYMBOL", firstSymbol)
@@ -215,9 +225,18 @@ class ComparisonViewController: UIViewController {
             }
         }
         group.notify(queue: .main) {
-            self.stockDates = self.stockDates.sorted(by: {$0 > $1})
-            self.tableView.reloadData()
             self.dismiss(animated: true, completion: nil)
+            if self.firstCharts.count == 0 && self.firstCharts.count == 0 && self.firstCharts.count == 0 {
+                let alert = UIAlertController(title: "Failed to Fetch Stock", message: "", preferredStyle: .alert)
+                self.present(alert, animated: true) {
+                    Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { [weak self] (_) in
+                        self?.dismiss(animated: true, completion: nil)
+                    }
+                }
+            } else {
+                self.stockDates = self.stockDates.sorted(by: {$0 > $1})
+                self.tableView.reloadData()
+            }
         }
     }
     

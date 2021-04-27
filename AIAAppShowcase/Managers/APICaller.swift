@@ -46,7 +46,6 @@ final class APICaller {
         let interval = Constants.interval + Interval.oneMin.rawValue
         let outputSize = Constants.outputSize + outputSize
         let urlString = Constants.baseEndpoint + function + symbol + interval + outputSize + Constants.apiKey + apiKey
-        print(urlString)
         guard let url = URL(string: urlString) else {
             return
         }
@@ -71,7 +70,6 @@ final class APICaller {
         let interval = Constants.interval + Interval.fiveMin.rawValue
         let outputSize = Constants.outputSize + outputSize
         let urlString = Constants.baseEndpoint + function + symbol + interval + outputSize + Constants.apiKey + apiKey
-        print(urlString)
         guard let url = URL(string: urlString) else {
             return
         }
@@ -96,7 +94,6 @@ final class APICaller {
         let interval = Constants.interval + Interval.fifteenMin.rawValue
         let outputSize = Constants.outputSize + outputSize
         let urlString = Constants.baseEndpoint + function + symbol + interval + outputSize + Constants.apiKey + apiKey
-        print(urlString)
         guard let url = URL(string: urlString) else {
             return
         }
@@ -121,7 +118,6 @@ final class APICaller {
         let interval = Constants.interval + Interval.thirtyMin.rawValue
         let outputSize = Constants.outputSize + outputSize
         let urlString = Constants.baseEndpoint + function + symbol + interval + outputSize + Constants.apiKey + apiKey
-        print(urlString)
         guard let url = URL(string: urlString) else {
             return
         }
@@ -146,7 +142,6 @@ final class APICaller {
         let interval = Constants.interval + Interval.sixtyMin.rawValue
         let outputSize = Constants.outputSize + outputSize
         let urlString = Constants.baseEndpoint + function + symbol + interval + outputSize + Constants.apiKey + apiKey
-        print(urlString)
         guard let url = URL(string: urlString) else {
             return
         }

@@ -211,12 +211,4 @@ class SortCollectionViewCell: UICollectionViewCell {
         ])
     }
     
-    public func configureCell(sortBy: String) {
-
-    }
-    
-    public func selectCell() {
-
-    }
-    
 }
